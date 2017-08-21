@@ -1,5 +1,7 @@
-code simple process server, could accept http request
+#code simple process server, could accept http request
 
 parsse http request
+
+imply cgi to call c/c++ functions
 
 

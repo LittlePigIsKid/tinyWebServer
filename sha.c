@@ -2,6 +2,24 @@
 #include"http.h"
 #include"connect.h"
 
+#include<errno.h>
+#define M_SIZE 24 // method size
+#define S_SIZE 24 // status size
+#define U_SIZE 128 // url size
+#define E_SIZE 24 // edtion of http
+
+#define RECV_LINE_BUF 1024 // recv function buf size
+
+struct http_request {
+	char method[M_SIZE];
+	char url[U_SIZE];
+	char edition[E_SIZE];
+	char status[S_SIZE];
+};
+
+int process_http_request(int client, struct http_request *request);
+int recv_one_line(int sock, char *buf, int size);
+
 int
 main(int argc, char *argv[])
 {
@@ -42,9 +60,13 @@ main(int argc, char *argv[])
 			//assert(write(1, buf_read, read_size) == read_size);
 			//printf("the read_size = %d\n", read_size);
 		//}
-		read_size = read(connfd, buf_read, READ_BUFFER);
-		assert(write(1, buf_read, read_size) == read_size);
-		printf("the read_size = %d\n", read_size);
+//		read_size = read(connfd, buf_read, READ_BUFFER);
+//		assert(write(1, buf_read, read_size) == read_size);
+//		printf("the read_size = %d\n", read_size);
+
+		struct http_request request;
+		//memset(request, 
+		process_http_request(connfd, &request);
 
 		//write to the client
 		int back_fd = open("./index.html", O_RDONLY);
@@ -71,3 +93,53 @@ main(int argc, char *argv[])
 		printf("close connfd\n");
 	}
 }
+
+
+int process_http_request(int client, struct http_request *request)
+{
+	char buf[RECV_LINE_BUF];
+	printf("line size is %d\n", recv_one_line(client, buf, sizeof(buf)));
+	printf("the first line is:\n%s", buf);
+	int index = 0;
+	char * ptr;
+	char * split = " ";
+	ptr = strtok(buf, split);
+	while (ptr  != NULL) {
+		printf("%s\n", ptr);	
+		ptr = strtok(NULL, split);
+	}
+	printf("end_reading ...\n");
+}
+
+/*
+* return the size that received
+*/
+int recv_one_line(int sock, char *buf, int size)
+{
+	int index = 0;
+	int recv_size = 0;
+	char recv_buf[1];
+	char recv_next_buf[1];
+	while (index < size && ((recv_size = recv(sock, recv_buf, 1, 0)) == 1)) {
+		if (recv_buf[0] == '\r') {
+			if (((recv_size = recv(sock, recv_next_buf, 1, 0)) == 1) && recv_next_buf[0] == '\n') {
+				buf[index++] = '\n';
+				break; 
+			} else if (recv_size != 1) {
+				if (recv_size == 0) {
+					printf("the recv return nothing\n");
+				} else {
+					printf("recv error, errno = %d\n", errno);
+				}
+			} else {
+				buf[index++] = recv_buf[0];
+			}
+		} else {
+			buf[index++] = recv_buf[0];
+		}
+
+	}
+	return index;
+}
+
+
