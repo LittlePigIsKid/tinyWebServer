@@ -36,20 +36,15 @@ main(int argc, char *argv[])
 		int connfd = accept(listenfd, (struct sockaddr*) &client_address, &client_addr_length);
 		assert(connfd >= 0);
 
-		//read from the connfd and print out 
-		char buf_read[READ_BUFFER];	
-		int read_size;
-		//while ((read_size = read(connfd, buf_read, READ_BUFFER)) > 0) { 
-			//assert(write(1, buf_read, read_size) == read_size);
-			//printf("the read_size = %d\n", read_size);
-		//}
-//		read_size = read(connfd, buf_read, READ_BUFFER);
-//		assert(write(1, buf_read, read_size) == read_size);
-//		printf("the read_size = %d\n", read_size);
-
 		struct http_request request;
 		//memset(request, 
 		process_http_request(connfd, &request);
+		printf("method: %s\n", request.method);
+		printf("edition: %s\n", request.edition);
+		printf("the read is out\n");
+		while (1) {
+
+		}
 
 		//write to the client
 		int back_fd = open("./index.html", O_RDONLY);

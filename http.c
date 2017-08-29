@@ -19,17 +19,21 @@ void send_headers(int client, const char *filename)
 int process_http_request(int client, struct http_request *request)
 {
 	char buf[RECV_LINE_BUF];
-	printf("line size is %d\n", recv_one_line(client, buf, sizeof(buf)));
-	printf("the first line is:\n%s", buf);
-	int index = 0;
-	char * ptr;
-	char * split = " ";
-	ptr = strtok(buf, split);
-	while (ptr  != NULL) {
-		printf("%s\n", ptr);	
-		ptr = strtok(NULL, split);
+	sscanf(buf, "%s %s %s", (request->method), (request->url), (request->edition));
+	printf("first line is: %s\n", buf);
+	printf("end_reading first line\n");
+	if (0 == strcmp(request->method, "GET")) {
+		printf("get method\n");
+		//process get method
 	}
-	printf("end_reading ...\n");
+	else if (0 == strcmp(request->method, "POST")) {
+		printf("post method \n");
+		//process post method
+	}
+	else {
+		printf("method not supportted");
+		return -1;
+	}
 }
 
 /*
