@@ -19,8 +19,10 @@ void send_headers(int client, const char *filename)
 int process_http_request(int client, struct http_request *request)
 {
 	char buf[RECV_LINE_BUF];
+	memset(buf, '\0', sizeof(buf));
+	recv_one_line(client, buf, sizeof(buf));
 	sscanf(buf, "%s %s %s", (request->method), (request->url), (request->edition));
-	printf("first line is: %s\n", buf);
+	printf("first line is: %s", buf);
 	printf("end_reading first line\n");
 	if (0 == strcmp(request->method, "GET")) {
 		printf("get method\n");
@@ -28,12 +30,14 @@ int process_http_request(int client, struct http_request *request)
 	}
 	else if (0 == strcmp(request->method, "POST")) {
 		printf("post method \n");
-		//process post method
+		process_http_post(client, request);
+		
 	}
 	else {
 		printf("method not supportted");
-		return -1;
+		return ERROR_STATUS;
 	}
+	return SUCCESS_STATUS;
 }
 
 /*
@@ -67,4 +71,43 @@ int recv_one_line(int sock, char *buf, int size)
 	return index;
 }
 
+int process_http_get(int client, struct http_request *request)
+{
+	
+}
 
+int process_http_post(int client, struct http_request *request)
+{
+	char buf[RECV_LINE_BUF];
+	char key[1024];
+	char value[1024];
+	//process head
+	do {
+		memset(buf, '\0', sizeof(buf));
+		memset(key, '\0', sizeof(key));
+		memset(value, '\0', sizeof(value));
+		recv_one_line(client, buf, sizeof(buf));
+		sscanf(buf, "%[^:]%*s%s", key, value);
+		printf("%s", buf);
+		printf("key: %s\n", key);
+		printf("value: %s\n", value);
+		if (0 == strcasecmp("content-length", key))
+			request->context_length = atoi(value);
+	} while(0 != strcmp(buf, "\n"));
+	printf("out of process http post\n");
+	memset(buf, '\0', sizeof(buf));
+	if (SUCCESS_STATUS == recv_n_bytes(client, buf, sizeof(buf), request->context_length))
+		printf("%s\n", buf);
+	else 
+		printf("process post body error\n");
+}
+
+int recv_n_bytes(int sock, char*buf, int size, int n)
+{
+	int result = read(sock, buf, n);
+	if (result != n) {
+		return ERROR_STATUS;
+	} else {
+		return SUCCESS_STATUS;
+	}
+}

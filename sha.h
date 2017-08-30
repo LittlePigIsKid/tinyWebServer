@@ -17,6 +17,8 @@
 #define READ_BUFFER 1024
 #define WRITE_BUFFER 1024
 #define SERVER_STRING "Server: jdbhttpd/0.1.0\r\n"
+#define ERROR_STATUS -1
+#define SUCCESS_STATUS 1
 
 #endif
 
