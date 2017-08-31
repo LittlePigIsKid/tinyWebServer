@@ -41,10 +41,6 @@ main(int argc, char *argv[])
 		process_http_request(connfd, &request);
 		printf("method: %s\n", request.method);
 		printf("edition: %s\n", request.edition);
-		printf("the read is out\n");
-		while (1) {
-
-		}
 
 		//write to the client
 		int back_fd = open("./index.html", O_RDONLY);
