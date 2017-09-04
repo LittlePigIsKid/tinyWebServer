@@ -1,14 +1,5 @@
-#include<iostream>
-using namespace std;
+#include"MyClass.h"
 
-class MyClass {
-	public:
-	MyClass(){}
-	~MyClass(){}
-	void operation();
-};
-
-extern "C"
 void MyClass::operation() {
 	cout << "Hello world" << endl;
 }
