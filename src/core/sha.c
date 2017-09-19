@@ -1,6 +1,6 @@
-#include"sha.h"
-#include"http.h"
-#include"connect.h"
+#include "sha.h"
+#include "../http/http.h"
+#include "../http/connect.h"
 
 
 int

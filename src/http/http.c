@@ -1,5 +1,5 @@
-#include"sha.h"
-#include"http.h"
+#include "../core/sha.h"
+#include "http.h"
 
 void send_headers(int client, const char *filename)
 {
