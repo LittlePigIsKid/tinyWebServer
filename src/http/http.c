@@ -1,4 +1,4 @@
-#include "../core/sha.h"
+#include "sha.h"
 #include "http.h"
 
 void send_headers(int client, const char *filename)

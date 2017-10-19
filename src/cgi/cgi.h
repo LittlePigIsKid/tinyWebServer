@@ -1,4 +1,4 @@
-#include "../http/http.h"
+#include "http.h"
 
 #ifndef __CGI_H
 #define __CGI_H

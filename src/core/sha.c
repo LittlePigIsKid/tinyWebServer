@@ -1,6 +1,6 @@
 #include "sha.h"
-#include "../http/http.h"
-#include "../http/connect.h"
+#include "http.h"
+#include "connect.h"
 
 
 int
@@ -63,8 +63,8 @@ main(int argc, char *argv[])
 		assert(write_size == 0);
 		close(back_fd);
 
-		close(connfd);
-		printf("close connfd\n");
+		//close(connfd);
+		//printf("close connfd\n");
 	}
 }
 

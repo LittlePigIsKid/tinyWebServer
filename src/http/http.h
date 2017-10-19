@@ -22,8 +22,9 @@
 #define CONNECTION_SIZE 64 //connection size
 #define CONTENT_TYPE_SIZE 32 //content-type size
 #define RECV_LINE_BUF 1024 // recv function buf size
-#define CONTENT_LENGTH_SIZE 32 //content-length size
 #define CONTENT_SIZE 1024 //content size of response
+#define URL_SIZE 1024
+#define SERVER_SIZE 1024
 /*
 * this struct is used to storge the http request infomation
 */
