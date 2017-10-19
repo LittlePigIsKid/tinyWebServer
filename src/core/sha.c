@@ -1,6 +1,7 @@
 #include "sha.h"
 #include "http.h"
 #include "connect.h"
+#include "dbg.h"
 
 
 int
@@ -39,8 +40,8 @@ main(int argc, char *argv[])
 		struct http_request request;
 		//memset(request, 
 		process_http_request(connfd, &request);
-		printf("method: %s\n", request.method);
-		printf("edition: %s\n", request.edition);
+		log_info("method: %s\n", request.method);
+		log_info("edtion: %s\n", request.edition);
 
 		//write to the client
 		int back_fd = open("./index.html", O_RDONLY);
@@ -48,7 +49,7 @@ main(int argc, char *argv[])
 		char buf_write[WRITE_BUFFER];
 		int write_size;
 		
-		printf("out put the response\n");
+		log_info("out put the response\n");
 		
 		send_headers(connfd, NULL);	
 
@@ -58,7 +59,7 @@ main(int argc, char *argv[])
 			printf("%s\n", buf_write);
 		}
 
-		printf("finish write back\n");
+		log_info("finish write back\n");
 
 		assert(write_size == 0);
 		close(back_fd);
